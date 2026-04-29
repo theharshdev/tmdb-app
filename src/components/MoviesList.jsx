@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
 import Pagination from "./Pagination";
 import SearchInput from "./SearchInput";
+import Filter from "./Filter";
 
 const API_KEY = "1dd802c65ce8e326e942d6a1b3963478";
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -13,14 +14,26 @@ function MoviesList() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [query, setQuery] = useState("");
+  const [year, setYear] = useState("");
+  const [genre, setGenre] = useState("");
+  const [language, setLanguage] = useState("");
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       setLoading(true);
 
-      const endpoint = query
-        ? `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
-        : `${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`;
+      let endpoint = "";
+
+      if (query) {
+        endpoint = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`;
+      } else if (year || genre || language) {
+        endpoint = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}
+        ${year ? `&primary_release_year=${year}` : ""}
+        ${genre ? `&with_genres=${genre}` : ""}
+        ${language ? `&with_original_language=${language}` : ""}`;
+      } else {
+        endpoint = `${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`;
+      }
 
       fetch(endpoint)
         .then((res) => res.json())
@@ -42,24 +55,48 @@ function MoviesList() {
 
       return () => clearTimeout(delayDebounce);
     }, 400);
-  }, [page, query]);
+  }, [page, query, year, genre, language]);
 
   return (
-    <section className="sm:px-4 px-2">
-      <SearchInput query={query} setQuery={setQuery} setPage={setPage} />
-      <div className="flex flex-col gap-2 justify-center items-center">
-        <div>{loading ? <p className="text-2xl mt-4">Loading movies...</p> : ""}</div>
-        <div>{error ? <p className="text-2xl mt-4">{error}</p> : ""}</div>
+    <section className="sm:px-4 px-2 grid grid-cols-4 gap-6 items-start max-w-7xl mx-auto py-8">
+      <div className="col-span-1 w-full sticky top-24 flex flex-col gap-4">
+        <SearchInput
+          query={query}
+          setQuery={setQuery}
+          setPage={setPage}
+          setYear={setYear}
+          setGenre={setGenre}
+          setLanguage={setLanguage}
+        />
+        <Filter
+          year={year}
+          genre={genre}
+          language={language}
+          setYear={setYear}
+          setGenre={setGenre}
+          setLanguage={setLanguage}
+          setPage={setPage}
+        />
       </div>
-      <div
-        className="max-w-6xl mx-auto my-10 lg:columns-5 md:columns-4 sm:columns-3 columns-2
-       sm:gap-4 gap-2"
-      >
-        {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
+      <div className="col-span-3">
+        {loading ? (
+          <p className="text-2xl text-center mb-4">Loading movies...</p>
+        ) : (
+          ""
+        )}
+        {error ? <p className="text-2xl text-center mb-4">{error}</p> : ""}
+        {movies.length === 0 && !loading ? (
+          <p className="text-2xl text-center mb-4">Nothing Found!</p>
+        ) : (
+          ""
+        )}
+        <div className="lg:columns-4 md:columns-3 columns-2 sm:gap-4 gap-2">
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))}
+        </div>
+        <Pagination page={page} setPage={setPage} totalPages={totalPages} />
       </div>
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </section>
   );
 }
