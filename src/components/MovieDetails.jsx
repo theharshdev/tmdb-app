@@ -8,6 +8,7 @@ const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
 function MovieDetails() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
+  const [cast, setCast] = useState([]);
 
   useEffect(() => {
     if (movie) {
@@ -15,11 +16,21 @@ function MovieDetails() {
     }
   }, [movie]);
 
+  const endpoint = `${BASE_URL}/movie/${id}?api_key=${API_KEY}`;
+  const castEndPoint = `${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`;
+
   useEffect(() => {
-    fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`)
+    fetch(endpoint)
       .then((res) => res.json())
       .then((data) => setMovie(data));
+
+    fetch(castEndPoint)
+      .then((res) => res.json())
+      .then((data) => setCast(data.cast));
   }, [id]);
+
+  console.log(endpoint);
+  console.log(castEndPoint);
 
   if (!movie) return <p className="text-center pt-10">Loading...</p>;
 
@@ -47,6 +58,7 @@ function MovieDetails() {
           <div className="flex flex-col gap-4">
             {/* Title */}
             <h1 className="text-4xl font-bold">{movie.title}</h1>
+            <h2 className="text-4xl font-bold italic">{`Original Title: "${movie.original_title}"`}</h2>
             {/* Tagline */}
             <p className="text-white italic">{movie.tagline}</p>
             {/* Meta */}
@@ -146,6 +158,49 @@ function MovieDetails() {
               )}
             </div>
           </div>
+        </div>
+      </div>
+      {/* Cast */}
+      <div className="max-w-5xl mx-auto py-12 px-4">
+        <h2 className="text-4xl text-center font-semibold mb-8">Top Cast</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6">
+          {cast
+            .sort((a, b) => a.order - b.order) // main cast first
+            .slice(0, 18)
+            .map((actor) => (
+              <div
+                key={actor.id}
+                className="bg-zinc-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 group"
+              >
+                {/* Image */}
+                <div className="relative">
+                  <img
+                    src={
+                      actor.profile_path
+                        ? `${IMAGE_BASE}${actor.profile_path}`
+                        : "https://via.placeholder.com/300x450?text=No+Image"
+                    }
+                    alt={actor.name}
+                    className="w-full h-32 object-cover"
+                  />
+                  {/* Overlay on hover */}
+                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-3">
+                    <p className="text-xs text-gray-300">Popularity: {actor.popularity?.toFixed(1)}</p>
+                    <p className="text-xs text-gray-400">Known for: {actor.known_for_department}</p>
+                  </div>
+                </div>
+                {/* Info */}
+                <div className="p-3 flex flex-col gap-1">
+                  <h3 className="text-sm font-semibold text-white line-clamp-1">{actor.name}</h3>
+                  <p className="text-xs text-gray-400 line-clamp-1">as {actor.character || "Unknown"}</p>
+                  {/* Extra meta */}
+                  <div className="flex justify-between items-center mt-1 text-[10px] text-gray-500">
+                    <span>#{actor.order + 1}</span>
+                    <span>{actor.gender === 1 ? "Female" : actor.gender === 2 ? "Male" : "—"}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </div>

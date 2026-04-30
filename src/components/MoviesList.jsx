@@ -28,14 +28,12 @@ function MoviesList() {
       if (query) {
         endpoint = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`;
       } else if (year || genre || language || rating) {
-        endpoint = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}
-        ${year ? `&primary_release_year=${year}` : ""}
-        ${genre ? `&with_genres=${genre}` : ""}
-        ${language ? `&with_original_language=${language}` : ""}
-        ${rating ? `&vote_average.gte=${rating}` : ""}&vote_count.gte=20`;
+        endpoint = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}${year ? `&primary_release_year=${year}` : ""}${genre ? `&with_genres=${genre}` : ""}${language ? `&with_original_language=${language}` : ""}${rating ? `&vote_average.gte=${rating}` : ""}`;
       } else {
         endpoint = `${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`;
       }
+
+      console.log(`The Endpoint URL: ${endpoint}`);
 
       fetch(endpoint)
         .then((res) => res.json())
