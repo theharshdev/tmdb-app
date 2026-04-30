@@ -82,7 +82,22 @@ function MoviesList() {
         />
       </div>
       <div className="col-span-3">
-        {loading ? <p className="text-2xl text-center mb-4">Loading movies...</p> : ""}
+        {loading ? (
+          <div className="mb-4 break-inside-avoid animate-pulse ">
+            <div className="lg:columns-4 md:columns-3 columns-2 sm:gap-4 gap-2">
+              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
         {error ? <p className="text-2xl text-center mb-4">{error}</p> : ""}
         {movies.length === 0 && !loading ? <p className="text-2xl text-center mb-4">Nothing Found!</p> : ""}
         <div className="lg:columns-4 md:columns-3 columns-2 sm:gap-4 gap-2">
