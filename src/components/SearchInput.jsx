@@ -1,11 +1,4 @@
-function SearchInput({
-  query,
-  setQuery,
-  setPage,
-  setYear,
-  setGenre,
-  setLanguage,
-}) {
+function SearchInput({ query, setQuery, setPage, setYear, setGenre, setLanguage, setRating }) {
   return (
     <>
       <input
@@ -18,6 +11,7 @@ function SearchInput({
           setGenre("");
           setYear("");
           setLanguage("");
+          setRating("");
           setQuery(e.target.value);
         }}
       />

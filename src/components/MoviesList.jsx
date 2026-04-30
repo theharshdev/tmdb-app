@@ -17,6 +17,7 @@ function MoviesList() {
   const [year, setYear] = useState("");
   const [genre, setGenre] = useState("");
   const [language, setLanguage] = useState("");
+  const [rating, setRating] = useState("");
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -26,11 +27,12 @@ function MoviesList() {
 
       if (query) {
         endpoint = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`;
-      } else if (year || genre || language) {
+      } else if (year || genre || language || rating) {
         endpoint = `${BASE_URL}/discover/movie?api_key=${API_KEY}&page=${page}
         ${year ? `&primary_release_year=${year}` : ""}
         ${genre ? `&with_genres=${genre}` : ""}
-        ${language ? `&with_original_language=${language}` : ""}`;
+        ${language ? `&with_original_language=${language}` : ""}
+        ${rating ? `&vote_average.gte=${rating}` : ""}&vote_count.gte=20`;
       } else {
         endpoint = `${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`;
       }
@@ -52,10 +54,10 @@ function MoviesList() {
         top: 0,
         behavior: "smooth",
       });
-
-      return () => clearTimeout(delayDebounce);
     }, 400);
-  }, [page, query, year, genre, language]);
+
+    return () => clearTimeout(delayDebounce);
+  }, [page, query, year, genre, language, rating]);
 
   return (
     <section className="sm:px-4 px-2 grid grid-cols-4 gap-6 items-start max-w-7xl mx-auto py-8">
@@ -67,29 +69,24 @@ function MoviesList() {
           setYear={setYear}
           setGenre={setGenre}
           setLanguage={setLanguage}
+          setRating={setRating}
         />
         <Filter
           year={year}
           genre={genre}
           language={language}
+          rating={rating}
           setYear={setYear}
           setGenre={setGenre}
           setLanguage={setLanguage}
+          setRating={setRating}
           setPage={setPage}
         />
       </div>
       <div className="col-span-3">
-        {loading ? (
-          <p className="text-2xl text-center mb-4">Loading movies...</p>
-        ) : (
-          ""
-        )}
+        {loading ? <p className="text-2xl text-center mb-4">Loading movies...</p> : ""}
         {error ? <p className="text-2xl text-center mb-4">{error}</p> : ""}
-        {movies.length === 0 && !loading ? (
-          <p className="text-2xl text-center mb-4">Nothing Found!</p>
-        ) : (
-          ""
-        )}
+        {movies.length === 0 && !loading ? <p className="text-2xl text-center mb-4">Nothing Found!</p> : ""}
         <div className="lg:columns-4 md:columns-3 columns-2 sm:gap-4 gap-2">
           {movies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />

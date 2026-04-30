@@ -1,12 +1,4 @@
-function Filter({
-  year,
-  genre,
-  language,
-  setYear,
-  setGenre,
-  setLanguage,
-  setPage,
-}) {
+function Filter({ year, genre, language, rating, setYear, setGenre, setLanguage, setRating, setPage }) {
   const GENRES = [
     { id: "", name: "All Genres" },
     { id: 28, name: "Action" },
@@ -126,7 +118,7 @@ function Filter({
     <div className="flex flex-wrap gap-4">
       <label className="border border-zinc-500 rounded-xl p-3 h-fit w-full">
         <select
-          className="outline-0 border-0 block w-full"
+          className="outline-0 border-0 block w-full bg-zinc-800 text-white"
           value={year}
           onChange={(e) => {
             setPage(1);
@@ -147,7 +139,7 @@ function Filter({
             setPage(1);
             setGenre(e.target.value);
           }}
-          className="outline-0 border-0 block w-full"
+          className="outline-0 border-0 block w-full bg-zinc-800 text-white"
         >
           {GENRES.map((gener) => (
             <option key={gener.id} value={gener.id}>
@@ -163,13 +155,34 @@ function Filter({
             setPage(1);
             setLanguage(e.target.value);
           }}
-          className="outline-0 border-0 block w-full"
+          className="outline-0 border-0 block w-full bg-zinc-800 text-white"
         >
           {LANGUAGES.map((LANGUAGE) => (
             <option key={LANGUAGE.id} value={LANGUAGE.id}>
               {LANGUAGE.name}
             </option>
           ))}
+        </select>
+      </label>
+      <label className="border border-zinc-500 rounded-xl p-3 h-fit w-full">
+        <select
+          value={rating}
+          onChange={(e) => {
+            setPage(1);
+            setRating(e.target.value);
+          }}
+          className="outline-0 border-0 block w-full bg-zinc-800 text-white"
+        >
+          <option value="">All Ratings</option>
+          <option value="5">5+</option>
+          <option value="6">6+</option>
+          <option value="7">7+</option>
+          <option value="7.5">7.5+</option>
+          <option value="8">8+</option>
+          <option value="8.5">8.5+</option>
+          <option value="9">9+</option>
+          <option value="9.5">9.5+</option>
+          <option value="10">10</option>
         </select>
       </label>
     </div>

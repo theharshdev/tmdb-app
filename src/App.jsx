@@ -19,7 +19,7 @@ function App() {
                 </>
               }
             />
-            <Route path="/movie/:id" element={<MovieDetails />} />
+            <Route path="/movie/:id/:slug" element={<MovieDetails />} />
           </Routes>
         </main>
       </BrowserRouter>
