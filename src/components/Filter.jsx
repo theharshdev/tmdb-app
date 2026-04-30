@@ -1,4 +1,14 @@
-function Filter({ year, genre, language, rating, setYear, setGenre, setLanguage, setRating, setPage }) {
+function Filter({
+  year,
+  genre,
+  language,
+  rating,
+  setYear,
+  setGenre,
+  setLanguage,
+  setRating,
+  setPage,
+}) {
   const GENRES = [
     { id: "", name: "All Genres" },
     { id: 28, name: "Action" },
@@ -116,9 +126,9 @@ function Filter({ year, genre, language, rating, setYear, setGenre, setLanguage,
   ];
   return (
     <div className="flex flex-wrap gap-4">
-      <label className="border border-zinc-500 rounded-xl p-3 h-fit w-full">
+      <label className="border border-zinc-500 rounded-xl pr-3 overflow-hidden h-fit w-full">
         <select
-          className="outline-0 border-0 block w-full bg-zinc-800 text-white"
+          className="outline-0 border-0 block w-full p-3 bg-zinc-800 text-white"
           value={year}
           onChange={(e) => {
             setPage(1);
@@ -132,14 +142,14 @@ function Filter({ year, genre, language, rating, setYear, setGenre, setLanguage,
           ))}
         </select>
       </label>
-      <label className="border border-zinc-500 rounded-xl p-3 h-fit w-full">
+      <label className="border border-zinc-500 rounded-xl pr-3 overflow-hidden h-fit w-full">
         <select
           value={genre}
           onChange={(e) => {
             setPage(1);
             setGenre(e.target.value);
           }}
-          className="outline-0 border-0 block w-full bg-zinc-800 text-white"
+          className="outline-0 border-0 block w-full p-3 bg-zinc-800 text-white"
         >
           {GENRES.map((gener) => (
             <option key={gener.id} value={gener.id}>
@@ -148,14 +158,14 @@ function Filter({ year, genre, language, rating, setYear, setGenre, setLanguage,
           ))}
         </select>
       </label>
-      <label className="border border-zinc-500 rounded-xl p-3 h-fit w-full">
+      <label className="border border-zinc-500 rounded-xl pr-3 overflow-hidden h-fit w-full">
         <select
           value={language}
           onChange={(e) => {
             setPage(1);
             setLanguage(e.target.value);
           }}
-          className="outline-0 border-0 block w-full bg-zinc-800 text-white"
+          className="outline-0 border-0 block w-full p-3 bg-zinc-800 text-white"
         >
           {LANGUAGES.map((LANGUAGE) => (
             <option key={LANGUAGE.id} value={LANGUAGE.id}>
@@ -164,14 +174,14 @@ function Filter({ year, genre, language, rating, setYear, setGenre, setLanguage,
           ))}
         </select>
       </label>
-      <label className="border border-zinc-500 rounded-xl p-3 h-fit w-full">
+      <label className="border border-zinc-500 rounded-xl pr-3 overflow-hidden h-fit w-full">
         <select
           value={rating}
           onChange={(e) => {
             setPage(1);
             setRating(e.target.value);
           }}
-          className="outline-0 border-0 block w-full bg-zinc-800 text-white"
+          className="outline-0 border-0 block w-full p-3 bg-zinc-800 text-white"
         >
           <option value="">All Ratings</option>
           <option value="5">5+</option>
