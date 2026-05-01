@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import MovieCard from "./MovieCard";
+import Cast from "./Cast";
 
 const API_KEY = "1dd802c65ce8e326e942d6a1b3963478";
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -9,6 +11,8 @@ function MovieDetails() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [cast, setCast] = useState([]);
+  const [trailers, setTrailers] = useState([]);
+  const [similarMovies, setSimilarMovies] = useState([]);
 
   useEffect(() => {
     if (movie) {
@@ -18,6 +22,8 @@ function MovieDetails() {
 
   const endpoint = `${BASE_URL}/movie/${id}?api_key=${API_KEY}`;
   const castEndPoint = `${BASE_URL}/movie/${id}/credits?api_key=${API_KEY}`;
+  const trailerEndPoint = `${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}`;
+  const similarMoviesEndPoint = `${BASE_URL}/movie/${id}/similar?api_key=${API_KEY}`;
 
   useEffect(() => {
     fetch(endpoint)
@@ -27,15 +33,26 @@ function MovieDetails() {
     fetch(castEndPoint)
       .then((res) => res.json())
       .then((data) => setCast(data.cast));
+
+    fetch(trailerEndPoint)
+      .then((res) => res.json())
+      .then((data) => setTrailers(data.results));
+
+    fetch(similarMoviesEndPoint)
+      .then((res) => res.json())
+      .then((data) => setSimilarMovies(data.results));
   }, [id]);
+
+  const filteredTrailers = trailers.filter((t) => t.type === "Trailer");
 
   console.log(endpoint);
   console.log(castEndPoint);
+  console.log(trailerEndPoint);
 
   if (!movie) return <p className="text-center pt-20 text-4xl">Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-white">
+    <div className="pt-20">
       {/* Backdrop */}
       <div className="relative w-full h-[60vh]">
         <img
@@ -106,6 +123,22 @@ function MovieDetails() {
                 <p>{movie.popularity}</p>
               </div>
             </div>
+            {/* Trailers */}
+            <div className="mt-5">
+              <h3 className="text-3xl font-medium">Watch Trailer</h3>
+              {filteredTrailers.length > 0 ? (
+                filteredTrailers.map((trailer) => (
+                  <iframe
+                    key={trailer.key}
+                    src={`https://www.youtube.com/embed/${trailer.key}`}
+                    title={trailer.name}
+                    className="w-full aspect-video rounded-xl mt-8"
+                  />
+                ))
+              ) : (
+                <p className="text-center py-8 text-xl font-medium">No trailer found</p>
+              )}
+            </div>
             {/* Cast */}
             <div className="mt-5">
               <h2 className="text-3xl font-semibold mb-8">Top Cast</h2>
@@ -114,38 +147,7 @@ function MovieDetails() {
                   .sort((a, b) => a.order - b.order) // main cast first
                   .slice(0, 18)
                   .map((actor) => (
-                    <div
-                      key={actor.id}
-                      className="bg-zinc-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 group"
-                    >
-                      {/* Image */}
-                      <div className="relative">
-                        <img
-                          src={
-                            actor.profile_path
-                              ? `${IMAGE_BASE}${actor.profile_path}`
-                              : "https://placehold.net/avatar-3.svg"
-                          }
-                          alt={actor.name}
-                          className={`${actor.profile_path ? "object-cover" : "object-contain opacity-30"} w-full h-32`}
-                        />
-                        {/* Overlay on hover */}
-                        <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-3">
-                          <p className="text-xs text-gray-300">Popularity: {actor.popularity?.toFixed(1)}</p>
-                          <p className="text-xs text-gray-400">Known for: {actor.known_for_department}</p>
-                        </div>
-                      </div>
-                      {/* Info */}
-                      <div className="p-3 flex flex-col gap-1">
-                        <h3 className="text-sm font-semibold text-white line-clamp-1">{actor.name}</h3>
-                        <p className="text-xs text-gray-400 line-clamp-1">as {actor.character || "Unknown"}</p>
-                        {/* Extra meta */}
-                        <div className="flex justify-between items-center mt-1 text-[10px] text-gray-500">
-                          <span>#{actor.order + 1}</span>
-                          <span>{actor.gender === 1 ? "Female" : actor.gender === 2 ? "Male" : "—"}</span>
-                        </div>
-                      </div>
-                    </div>
+                    <Cast key={actor.id} actor={actor} />
                   ))}
               </div>
             </div>
@@ -201,6 +203,17 @@ function MovieDetails() {
               )}
             </div>
           </div>
+        </div>
+      </div>
+      {/* Similar Movies */}
+      <div className="max-w-6xl mx-auto py-12 px-4">
+        <h3 className="text-center text-3xl font-medium">Similar Movies</h3>
+        <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 sm:gap-4 gap-2 mt-8">
+          {similarMovies.length > 0 ? (
+            similarMovies.slice(0, 10).map((movie) => <MovieCard key={movie.id} movie={movie} />)
+          ) : (
+            <p className="text-center py-8 text-xl font-medium">Nothing found similar!</p>
+          )}
         </div>
       </div>
     </div>

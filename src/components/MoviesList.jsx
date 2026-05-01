@@ -58,7 +58,7 @@ function MoviesList() {
   }, [page, query, year, genre, language, rating]);
 
   return (
-    <section className="sm:px-4 px-2 grid grid-cols-4 gap-6 items-start max-w-7xl mx-auto py-8">
+    <section className="sm:px-4 px-2 grid grid-cols-4 gap-6 items-start max-w-6xl mx-auto py-32">
       <div className="col-span-1 w-full sticky top-24 flex flex-col gap-4">
         <SearchInput
           query={query}
