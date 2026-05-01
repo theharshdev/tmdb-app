@@ -89,7 +89,10 @@ function MovieDetails() {
             {/* Genres */}
             <div className="flex flex-wrap gap-2">
               {movie.genres.map((g) => (
-                <span key={g.id} className="bg-white text-black px-3 py-1 rounded-full text-xs font-medium">
+                <span
+                  key={g.id}
+                  className="bg-white text-black px-3 py-1 rounded-full text-xs font-medium"
+                >
                   {g.name}
                 </span>
               ))}
@@ -114,9 +117,11 @@ function MovieDetails() {
                 <p className="text-gray-400">Revenue</p>
                 <p>${movie.revenue.toLocaleString()}</p>
               </div>
-              <div>
+              <div> 
                 <p className="text-gray-400">Country</p>
-                <p>{movie.production_countries.map((c) => c.name).join(", ")}</p>
+                <p>
+                  {movie.production_countries.map((c) => c.name).join(", ")}
+                </p>
               </div>
               <div>
                 <p className="text-gray-400">Popularity</p>
@@ -127,16 +132,20 @@ function MovieDetails() {
             <div className="mt-5">
               <h3 className="text-3xl font-medium">Watch Trailer</h3>
               {filteredTrailers.length > 0 ? (
-                filteredTrailers.map((trailer) => (
-                  <iframe
-                    key={trailer.key}
-                    src={`https://www.youtube.com/embed/${trailer.key}`}
-                    title={trailer.name}
-                    className="w-full aspect-video rounded-xl mt-8"
-                  />
-                ))
+                filteredTrailers
+                  .slice(0, 1)
+                  .map((trailer) => (
+                    <iframe
+                      key={trailer.key}
+                      src={`https://www.youtube.com/embed/${trailer.key}`}
+                      title={trailer.name}
+                      className="w-full aspect-video rounded-xl mt-8"
+                    />
+                  ))
               ) : (
-                <p className="text-center py-8 text-xl font-medium">No trailer found</p>
+                <p className="text-center py-8 text-xl font-medium">
+                  No trailer found
+                </p>
               )}
             </div>
             {/* Cast */}
@@ -156,7 +165,10 @@ function MovieDetails() {
               <h3 className="text-lg font-semibold mb-2">Production</h3>
               <div className="flex flex-wrap gap-2 items-center">
                 {movie.production_companies.map((company) => (
-                  <div key={company.id} className="flex justify-center flex-col gap-2">
+                  <div
+                    key={company.id}
+                    className="flex justify-center flex-col gap-2"
+                  >
                     {company.logo_path && (
                       <img
                         src={`https://image.tmdb.org/t/p/w200${company.logo_path}`}
@@ -173,7 +185,10 @@ function MovieDetails() {
               <h3 className="text-lg font-semibold mb-2">Languages</h3>
               <div className="flex gap-2 flex-wrap">
                 {movie.spoken_languages.map((lang) => (
-                  <span key={lang.iso_639_1} className="bg-zinc-700 px-3 py-1 rounded text-sm">
+                  <span
+                    key={lang.iso_639_1}
+                    className="bg-zinc-700 px-3 py-1 rounded text-sm"
+                  >
                     {lang.english_name}
                   </span>
                 ))}
@@ -210,9 +225,13 @@ function MovieDetails() {
         <h3 className="text-center text-3xl font-medium">Similar Movies</h3>
         <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 sm:gap-4 gap-2 mt-8">
           {similarMovies.length > 0 ? (
-            similarMovies.slice(0, 10).map((movie) => <MovieCard key={movie.id} movie={movie} />)
+            similarMovies
+              .slice(0, 10)
+              .map((movie) => <MovieCard key={movie.id} movie={movie} />)
           ) : (
-            <p className="text-center py-8 text-xl font-medium">Nothing found similar!</p>
+            <p className="text-center py-8 text-xl font-medium">
+              Nothing found similar!
+            </p>
           )}
         </div>
       </div>

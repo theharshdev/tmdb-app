@@ -72,7 +72,11 @@ function RecentPlaying() {
         ""
       )}
       {error ? <p className="text-2xl text-center mb-4">{error}</p> : ""}
-      {movies.length === 0 && !loading ? <p className="text-2xl text-center mb-4">Nothing Found!</p> : ""}
+      {movies.length === 0 && !loading ? (
+        <p className="text-2xl text-center mb-4">Nothing Found!</p>
+      ) : (
+        ""
+      )}
       <div className="lg:columns-5 md:columns-3 columns-2 sm:gap-4 gap-2 sm:mt-6 mt-2">
         {movies.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
