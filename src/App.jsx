@@ -6,6 +6,7 @@ import MovieDetails from "./components/MovieDetails";
 import CastDetails from "./components/CastDetails";
 import RecentPlaying from "./components/RecentPlaying";
 import About from "./components/About";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/movie/:id/:slug" element={<MovieDetails />} />
             <Route path="/cast/:castId/:castSlug" element={<CastDetails />} />
           </Routes>
+          <Footer />
         </main>
       </BrowserRouter>
     </>
