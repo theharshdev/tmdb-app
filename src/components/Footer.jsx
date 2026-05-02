@@ -16,7 +16,6 @@ function Footer() {
             into cast, trailers, and detailed insights.
           </p>
         </div>
-
         {/* Explore */}
         <div>
           <h3 className="text-white font-medium mb-3">Explore</h3>
@@ -32,7 +31,6 @@ function Footer() {
             </NavLink>
           </ul>
         </div>
-
         {/* Features */}
         <div>
           <h3 className="text-white font-medium mb-3">Features</h3>
@@ -43,7 +41,6 @@ function Footer() {
           </ul>
         </div>
       </div>
-
       {/* Tech Stack */}
       <div className="border-t border-zinc-800">
         <div className="max-w-6xl mx-auto px-6 py-6 text-sm">
@@ -51,7 +48,6 @@ function Footer() {
           <p>React • React Router • Tailwind CSS • TMDB API • JavaScript</p>
         </div>
       </div>
-
       {/* Project Overview */}
       <div className="border-t border-zinc-800">
         <div className="max-w-6xl mx-auto px-6 py-6 text-sm leading-relaxed">
@@ -69,7 +65,6 @@ function Footer() {
           </p>
         </div>
       </div>
-
       {/* Bottom */}
       <div className="border-t border-zinc-800 text-center text-xs py-4 text-zinc-500">
         © {new Date().getFullYear()} My Movies. All rights reserved.
