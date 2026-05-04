@@ -1,14 +1,4 @@
-function Filter({
-  year,
-  genre,
-  language,
-  rating,
-  setYear,
-  setGenre,
-  setLanguage,
-  setRating,
-  setPage,
-}) {
+function Filter({ year, genre, language, rating, setYear, setGenre, setLanguage, setRating, setPage }) {
   const GENRES = [
     { id: "", name: "All Genres" },
     { id: 28, name: "Action" },

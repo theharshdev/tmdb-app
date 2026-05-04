@@ -1,23 +1,49 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import MovieCard from "./MovieCard";
 import Pagination from "./Pagination";
 import SearchInput from "./SearchInput";
 import Filter from "./Filter";
+import ClearFilter from "./ClearFilter";
 
 const API_KEY = "1dd802c65ce8e326e942d6a1b3963478";
 const BASE_URL = "https://api.themoviedb.org/3";
 
 function MoviesList() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [query, setQuery] = useState("");
-  const [year, setYear] = useState("");
-  const [genre, setGenre] = useState("");
-  const [language, setLanguage] = useState("");
-  const [rating, setRating] = useState("");
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+  const [query, setQuery] = useState(searchParams.get("query") || "");
+  const [year, setYear] = useState(searchParams.get("year") || "");
+  const [genre, setGenre] = useState(searchParams.get("genre") || "");
+  const [language, setLanguage] = useState(searchParams.get("language") || "");
+  const [rating, setRating] = useState(searchParams.get("rating") || "");
+
+  useEffect(() => {
+    const params = {};
+
+    if (page > 1) params.page = page;
+    if (query) params.query = query;
+    if (year) params.year = year;
+    if (genre) params.genre = genre;
+    if (language) params.language = language;
+    if (rating) params.rating = rating;
+
+    setSearchParams(params);
+  }, [page, query, year, genre, language, rating]);
+
+  useEffect(() => {
+    setPage(Number(searchParams.get("page")) || 1);
+    setQuery(searchParams.get("query") || "");
+    setYear(searchParams.get("year") || "");
+    setGenre(searchParams.get("genre") || "");
+    setLanguage(searchParams.get("language") || "");
+    setRating(searchParams.get("rating") || "");
+  }, [searchParams]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -80,19 +106,27 @@ function MoviesList() {
           setRating={setRating}
           setPage={setPage}
         />
+        <ClearFilter
+          setQuery={setQuery}
+          setYear={setYear}
+          setGenre={setGenre}
+          setLanguage={setLanguage}
+          setRating={setRating}
+          setPage={setPage}
+        />
       </div>
       <div className="col-span-3">
         {loading ? (
           <div className="mb-4 break-inside-avoid animate-pulse ">
-            <div className="lg:columns-4 md:columns-3 columns-2 sm:gap-4 gap-2">
-              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
-              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
-              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
-              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
-              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
-              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
-              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
-              <div className="h-96 rounded-xl bg-zinc-700 sm:mb-4 mb-2" />
+            <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 sm:gap-4 gap-2">
+              <div className="h-96 rounded-xl bg-zinc-700" />
+              <div className="h-96 rounded-xl bg-zinc-700" />
+              <div className="h-96 rounded-xl bg-zinc-700" />
+              <div className="h-96 rounded-xl bg-zinc-700" />
+              <div className="h-96 rounded-xl bg-zinc-700" />
+              <div className="h-96 rounded-xl bg-zinc-700" />
+              <div className="h-96 rounded-xl bg-zinc-700" />
+              <div className="h-96 rounded-xl bg-zinc-700" />
             </div>
           </div>
         ) : (
